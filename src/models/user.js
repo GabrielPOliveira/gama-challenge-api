@@ -25,16 +25,6 @@ module.exports = (sequelize, DataTypes) => {
           notNull: {msg: 'Usuário precisa de um login!'},
           notEmpty: {msg: 'Login não pode ser vazio'},
           len: {args:[1, 20], msg: 'Login deve ter até 20 caracteres'},
-          async isUnique(value, next) {
-            await User.findOne({
-              where: {login: value}
-            }).then((user) => {
-              if (user){
-                return next('Login já cadastrado')
-              }
-              next();
-            })
-          }
         },
       },
       password: {
