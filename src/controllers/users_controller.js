@@ -6,6 +6,10 @@ module.exports = {
         try {
             const {login, password, name} = req.body;
 
+            if (!login){
+                return res.status(400).send("Usuário precisa de um login!");
+            } 
+
             const loginExists = await User.findOne({ where: { login }});
 
             if (loginExists){

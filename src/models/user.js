@@ -22,9 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
         validate: {
-          notNull: {msg: 'Usuário precisa de um login!'},
-          notEmpty: {msg: 'Login não pode ser vazio'},
-          len: {args:[1, 20], msg: 'Login deve ter até 20 caracteres'},
+          len: {args:[0, 20], msg: 'Login deve ter até 20 caracteres'}
         },
       },
       password: {
