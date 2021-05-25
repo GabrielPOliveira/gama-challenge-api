@@ -1,7 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+const bcrypt = require('bcrypt')
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -13,20 +12,30 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  User.init(
-  {   uuid: {
+  User.init({
+        uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
       },
       login: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           notNull: {msg: 'Usuário precisa de um login!'},
           notEmpty: {msg: 'Login não pode ser vazio'},
-          max: {args:[20], msg: 'Login deve ter até 20 caracteres'},
-          unique: {args:[true], msg: 'Login já cadastrado'}
-        }
+          len: {args:[1, 20], msg: 'Login deve ter até 20 caracteres'},
+          async isUnique(value, next) {
+            await User.findOne({
+              where: {login: value}
+            }).then((user) => {
+              if (user){
+                return next('Login já cadastrado')
+              }
+              next();
+            })
+          }
+        },
       },
       password: {
         type: DataTypes.STRING,
@@ -34,7 +43,9 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notNull: {msg: 'Usuário precisa de uma senha'},
           notEmpty: {msg: 'Senha não pode ser vazio'},
-          min: {args:[8], msg: 'Senha deve ter no mínimo 8 caracteres'},          
+          len: {
+            args: [8, 100], 
+            msg: 'Senha deve ter no mínimo 8 caracteres'},          
         }
       },
       name: {
@@ -49,6 +60,12 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     tableName: 'users',
     modelName: 'User',
+    hooks: {
+      beforeCreate: async (user) => {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+      }
+    }
   });
   return User;
 };
