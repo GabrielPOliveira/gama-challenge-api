@@ -11,6 +11,7 @@ module.exports = async (req, res, next) => {
     try {   
         const data = await jwt.verify(token, process.env.SECRET);
         req.userId = data.id;
+ 
         next();
     } catch (error) {
         return res.status(401).json({ error: "Token inválido!"});

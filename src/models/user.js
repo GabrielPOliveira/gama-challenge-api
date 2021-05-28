@@ -48,10 +48,13 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users',
     modelName: 'User',
     hooks: {
-      beforeCreate: async (user) => {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
-      }
+      beforeSave: async (user) => {
+        if (user.password){
+          user.password = await bcrypt.hash(user.password, 10);
+
+        }
+      },
+      
     }
   });
   return User;

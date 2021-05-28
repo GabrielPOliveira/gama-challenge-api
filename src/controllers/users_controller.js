@@ -31,5 +31,37 @@ module.exports = {
 
     read: async(req, res) => {
         res.status(200).json(await User.findAll());
-    }
+    },
+
+    updatePass: async(req, res) => {
+        try {
+            const { password, newPassword, confirmNew } = req.body;
+
+            if ( !password || !newPassword || !confirmNew ){
+                return res.status(400).json({error: "Por favor, preencha todos os campos."});
+            }
+            
+            const user = await User.findByPk(req.userId);
+
+            if ( password && !(await User.validatePassword(password, user.password))){
+                return res.status(400).json({ error: "Senha atual incorreta"});
+            }
+
+            if ( !(newPassword === confirmNew)){
+                return res.status(400).json({ error: "As senhas não correspondem"});
+            }
+
+            const { login, id } = await user.update( {password: newPassword}, {
+                where: {
+                    id: req.userId
+                }
+            });
+
+            return res.status(200).json({login, id})
+
+        } catch (error) {
+            return res.status(401).json({error: error.message});
+        }
+    },
+
 }

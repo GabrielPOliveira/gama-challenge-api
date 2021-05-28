@@ -10,5 +10,6 @@ router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
 
 router.get('/list', AuthMiddleware, UserController.read);
+router.put('/updatepass', AuthMiddleware, UserController.updatePass);
 
 module.exports = router;

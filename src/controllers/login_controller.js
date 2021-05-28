@@ -17,10 +17,10 @@ module.exports = {
             const id = user.id;
 
             const token = jwt.sign({ id }, process.env.SECRET, {
-                expiresIn: "2m"
+                expiresIn: "10m"
             });
             
-            return res.json({user: {login, id}, token});
+            return res.json({ user: {login, id}, token});
             
         } catch (error) {
             res.status(401).json({ error: "Usuário ou senha inválidos." })
