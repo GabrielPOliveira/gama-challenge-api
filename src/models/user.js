@@ -3,11 +3,11 @@ const { Model } = require('sequelize');
 const bcrypt = require('bcrypt')
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+    
+    static async validatePassword(password, hash){
+      return bcrypt.compare(password, hash);
+    }
+
     static associate(models) {
       // define association here
     }
@@ -30,7 +30,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notNull: {msg: 'Usuário precisa de uma senha'},
-          notEmpty: {msg: 'Senha não pode ser vazio'},
           len: {
             args: [8, 100], 
             msg: 'Senha deve ter no mínimo 8 caracteres'},          
@@ -49,10 +48,13 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'users',
     modelName: 'User',
     hooks: {
-      beforeCreate: async (user) => {
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
-      }
+      beforeSave: async (user) => {
+        if (user.password){
+          user.password = await bcrypt.hash(user.password, 10);
+
+        }
+      },
+      
     }
   });
   return User;
