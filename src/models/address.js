@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.hasOne(Client, {foreignKey: "addressId"})
     }
+    toJSON(){
+      return { ...this.get(), id: undefined }
+    }
   };
   Address.init({
     uuid: {

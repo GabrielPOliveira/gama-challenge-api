@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(Address, {foreignKey: 'addressId'});
 
     }
+    toJSON(){
+      return { ...this.get(), id: undefined }
+    }
   };
   Client.init({
       uuid: {

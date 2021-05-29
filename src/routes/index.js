@@ -10,9 +10,10 @@ router.get('/', HomeController.index);
 router.post('/registrar', UserController.create);
 router.get('/list', UserController.read);
 
+router.get('/clientes', ClientController.index);
+router.get('/cliente', ClientController.find);
 router.post('/clientes', ClientController.create);
-// router.put('/clientes/:id', ClientController.update);
-// router.delete('/clientes/:id', ClientController.delete);
+router.put('/clientes', ClientController.update);
 
 
 module.exports = router;
