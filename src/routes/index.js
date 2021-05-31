@@ -13,7 +13,7 @@ router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
 
 router.get('/list', AuthMiddleware, UserController.read);
-router.put('/updatepass', AuthMiddleware, UserController.updatePass);
+router.put('/update', AuthMiddleware, UserController.update);
 
 router.get('/clientes', ClientController.index);
 router.get('/cliente', ClientController.find);
