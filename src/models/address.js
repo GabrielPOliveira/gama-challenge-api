@@ -5,9 +5,11 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Address extends Model {
 
-    static associate({Client}) {
+    static associate({Client, Doctor}) {
       // define association here
       this.hasOne(Client, {foreignKey: "addressId"})
+      this.hasOne(Doctor, {foreignKey: "addressId"})
+
     }
     toJSON(){
       return { ...this.get(), id: undefined }
