@@ -1,25 +1,22 @@
-const { Client, Address, BloodType } = require('../models');
-const CPF = require("@fnando/cpf/commonjs");
+const { Doctor, Address, Speciality } = require('../models');
 const  Yup  = require('yup');
 
 module.exports = {
 
     index: async(req,res) => {
         try {
-
-            const clients = await Client.findAll();
             
-            // console.log(clients.every(client => client instanceof Client)); // true
-            // console.log("All clients:", JSON.stringify(clients, null, 2));
-            res.status(200).send(clients); 
+            const doctors = await Doctor.findAll();
+
+            res.status(200).send(doctors); 
+
 
         } catch (error) {
             res.status(400).send(error.message)
         }
-        
     },
 
-    find: async(req,res) => {
+    find: async(req, res) => {
 
         try {
             
@@ -29,49 +26,45 @@ module.exports = {
 
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                     message: 'UUID do usuário não encontrado'
+                     message: 'UUID do Médico não encontrado'
                 })
             }
 
-            const client = await Client.findOne({
+            const doctor = await Doctor.findOne({
                 where: { uuid: req.body.uuid },                                
-                include: [{model: Address}, {model: BloodType, attributes: ['type']}]
-
+                include: [{model: Address}, {model: Speciality, attributes: ['description']}]
+                //include: {all:true}
+                 
             });
            
-            res.status(200).send(client); 
+            res.status(200).send(doctor); 
+
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).send(error.message)        
         }
-
 
     },
 
-    create: async(req,res) => {
+    create: async(req, res) => {
 
         try {
-
-            const {name, cpf, phone, cellphone, email, bloodtypesId} = req.body;
-            const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
             
-            const cpfExists = await Client.findOne({ where:{ cpf: cpf }});            
-            if (cpfExists != null){
-                    return res.status(400).send("CPF já cadastrado");
-            }else {
+            const {name, register, phone, cellphone, email, specialitiesId} = req.body;
+            const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
 
-               if(!CPF.isValid(cpf)){                  
-                   return res.status(400).send("CPF não válido!!");
-               }
+            const registerExists = await Doctor.findOne({ where:{ register: register }});            
+            if (registerExists != null){
+                    return res.status(400).send("Registro já cadastrado");
             }
 
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
-                cpf: Yup.string().required(),
+                register: Yup.string().required(),
                 phone: Yup.string(),
                 cellphone: Yup.string(),
                 email: Yup.string().email(),
-                bloodtypesId: Yup.number().required(),
+                specialitiesId: Yup.number().required(),
 
                 zip_code: Yup.string().required(),
                 address: Yup.string().required(),
@@ -88,7 +81,7 @@ module.exports = {
                 })
             }
 
-            const addressClient = await Address.create({
+            const addressDoctor = await Address.create({
                 zip_code,
                 address,
                 number,
@@ -97,21 +90,23 @@ module.exports = {
                 city,
                 state
             });
-            if(!addressClient){               
+            if(!addressDoctor){               
                 return res.status(400).send(error.message)
             }
-            const client = await Client.create({
+
+            const doctor = await Doctor.create({
                 name, 
-                cpf, 
+                register, 
                 phone, 
                 cellphone, 
                 email, 
-                bloodtypesId,
-                addressId: addressClient.id
+                specialitiesId,
+                addressId: addressDoctor.id
             });
 
             
-            res.status(201).send(client);
+            res.status(201).send(doctor);
+
 
         } catch (error) {
             res.status(400).send(error.message)
@@ -120,17 +115,16 @@ module.exports = {
     },
 
     update: async(req, res) => {
-        
-        try{
 
+        try {
+            
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
-                cpf: Yup.string().required(),
+                register: Yup.string().required(),
                 phone: Yup.string(),
                 cellphone: Yup.string(),
                 email: Yup.string().email(),
-                bloodtypesId: Yup.number().required(),
-                addressId: Yup.number(),
+                specialitiesId: Yup.number().required(),
 
                 zip_code: Yup.string().required(),
                 address: Yup.string().required(),
@@ -140,41 +134,37 @@ module.exports = {
                 city: Yup.string().required(),
                 state: Yup.string().required(),                
             });
-                                    
+
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
                      message: 'Falha na validação'
                 })
             }
 
-            const {uuid, name, cpf, phone, cellphone, email, bloodtypesId, addressId} = req.body;
+            const {uuid, name, register, phone, cellphone, email, specialitiesId, addressId} = req.body;
             const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
 
-            const client = await Client.findOne({where: {uuid: uuid}})
+            const doctor = await Doctor.findOne({where: {uuid: uuid}})
 
-            if (cpf && cpf !== client.cpf){
+            if (register && register !== doctor.register){ 
 
-                const clientExists = await Client.findOne({ where: {cpf: cpf }});
+                const doctorExists = await Doctor.findOne({ where: {register: register }});
 
-                if (clientExists){
+                if(doctorExists){
 
-                    return res.status(400).json({ error: 'CPF já cadastrado' })
-
-                }else if(!CPF.isValid(cpf)){
-                                      
-                    return res.status(400).send("CPF não válido!!");                    
+                    return res.status(400).json({ error: 'Registro já cadastrado' })
                 }
             }
-            
-            const clientUp = await client.update({
+
+            const DoctorUp = await doctor.update({
                 name: name, 
-                cpf: cpf, 
+                register: register, 
                 phone: phone, 
                 cellphone: cellphone, 
                 email: email, 
-                bloodtypesId: bloodtypesId,                
+                specialitiesId: specialitiesId,                
             });
-            const addressClient = await Address.update({
+            const addressDoctor = await Address.update({
                 zip_code: zip_code,
                 address: address,
                 number: number,
@@ -183,24 +173,21 @@ module.exports = {
                 city: city,
                 state: state,
             }, {where: {id: addressId}});
-            
-            const ClientUpdate = await Client.findOne({
+
+            const DoctorUpdate = await Doctor.findOne({
                 where: { uuid: uuid },                
                 include: Address
             });
             
-            res.status(201).send(ClientUpdate)
+            res.status(201).send(DoctorUpdate)
+
 
         } catch (error) {
             res.status(400).send(error.message)
+            
         }
+
     }
-
-    
-
-
-
-
 
 
 }
