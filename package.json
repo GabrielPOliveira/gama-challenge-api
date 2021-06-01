@@ -4,7 +4,17 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "dev": "nodemon ./bin/www",
+    "migrate": "npx sequelize-cli db:migrate",
+    "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
+    "pretest": "cross-env NODE_ENV=test npm run migrate:reset"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "dependencies": {
     "@fnando/cpf": "^1.0.2",
@@ -23,6 +33,9 @@
   },
   "devDependencies": {
     "@types/yup": "^0.29.11",
-    "nodemon": "~2.0.7"
+    "cross-env": "^7.0.3",
+    "jest": "^27.0.3",
+    "nodemon": "~2.0.7",
+    "supertest": "^6.1.3"
   }
 }
