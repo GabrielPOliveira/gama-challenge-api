@@ -7,10 +7,6 @@ module.exports = (sequelize, DataTypes) => {
     static async validatePassword(password, hash){
       return bcrypt.compare(password, hash);
     }
-
-    static associate(models) {
-      // define association here
-    }
   };
   User.init({
       uuid: {
@@ -40,8 +36,10 @@ module.exports = (sequelize, DataTypes) => {
     hooks: {
       beforeSave: async (user) => {
         if (user.password){
-          user.password = await bcrypt.hash(user.password, 10);
-
+          
+          const salt = await bcrypt.genSalt(10)
+          user.password = await bcrypt.hash(user.password, salt);
+          
         }
       },
       
