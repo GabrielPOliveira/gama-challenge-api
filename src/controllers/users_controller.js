@@ -42,10 +42,10 @@ module.exports = {
                 login: Yup.string(),
                 currentPassword: Yup.string().min(6),
                 password: Yup.string().min(6).when('currentPassword', (currentPassword, schema) => {
-                    currentPassword ? schema.required('teste') : schema
+                    return currentPassword ? schema.required() : schema
                 }),
-                passwordConfirmation: Yup.string().when('password', (password, schema) => {
-                    password ? schema.required().oneOf([Yup.ref('password'), null], 'As senhas não coincidem.') : schema
+                passwordConfirmation: Yup.string().when('password', (password, schema) => { 
+                    return password ? schema.required().oneOf([Yup.ref('password'), null]) : schema 
                 })
             })
             
@@ -55,7 +55,7 @@ module.exports = {
 
             const user = await User.findByPk(req.userId);
 
-            let { login, currentPassword } = req.body;
+            let { login, password, currentPassword } = req.body;
 
             if (login){
                 const loginExists = await User.findOne({ where : {login}});
@@ -63,19 +63,23 @@ module.exports = {
                 if (loginExists) return res.status(400).json({ error: "Login em uso."});
             }
 
-            const valid = await User.validatePassword(currentPassword, user.password);
-
-            if (!valid){
-                return res.status(401).json({ error: "Senha atual incorreta."});
+            if (currentPassword){
+                const valid = await User.validatePassword(currentPassword, user.password);
+                
+                if (!valid){
+                    return res.status(401).json({ error: "Senha atual incorreta."});
+                }
             }
 
-            const {uuid, name} = await User.update(req.body, {
-                where: { id: req.userId },
-                individualHooks: true
+            let options = { where: {id: req.userId}, returning: true}
+            password ? options = {...options, individualHooks : true} : options = { ...options, individualHooks : false};
+    
+            const updated = await User.update(req.body, options).then( result => {
+                login = result[1][0].login;
+                const id = req.userId;
+                return res.status(200).json({ message: "Sucesso", login, id})
             })
             
-            return res.status(200).json({uuid, login, name});
-
         } catch (error) {
             return res.status(400).json({error: error.message});
         }

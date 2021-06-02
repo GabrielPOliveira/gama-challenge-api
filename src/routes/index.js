@@ -12,8 +12,10 @@ router.get('/', HomeController.index);
 router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
 
-router.get('/list', AuthMiddleware, UserController.read);
-router.put('/update', AuthMiddleware, UserController.update);
+
+router.use(AuthMiddleware);
+router.get('/list', UserController.read);
+router.put('/update', UserController.update);
 
 router.get('/clientes', ClientController.index);
 router.get('/cliente', ClientController.find);
