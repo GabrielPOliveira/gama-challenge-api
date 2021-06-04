@@ -25,7 +25,7 @@ module.exports = {
 
             const {uuid, login, name, type} = await User.create(req.body);
 
-            return res.status(200).json({uuid, login, name, type});
+            return res.status(201).json({uuid, login, name, type});
             
         } catch (error) {
             return res.status(400).json({ error: error.message });
@@ -74,7 +74,7 @@ module.exports = {
             let options = { where: {id: req.userId}, returning: true}
             password ? options = {...options, individualHooks : true} : options = { ...options, individualHooks : false};
     
-            const updated = await User.update(req.body, options).then( result => {
+            await User.update(req.body, options).then( result => {
                 login = result[1][0].login;
                 const id = req.userId;
                 return res.status(200).json({ message: "Sucesso", login, id})
