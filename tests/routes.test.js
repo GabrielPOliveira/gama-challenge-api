@@ -137,7 +137,7 @@ const doctorObj = {
 
 describe('/medicos(s) route', () => {
     it('should require authentication', async () => {
-        const res = await request(app).get('/clientes');
+        const res = await request(app).get('/medicos');
         expect(res.statusCode).toEqual(401);
         expect(res.body).toEqual({ error: "Não autenticado"});
     });
@@ -152,5 +152,100 @@ describe('/medicos(s) route', () => {
         const res = await request(app).post('/medicos').auth(token, {type: 'bearer'}).send(doctorObj);
         expect(res.statusCode).toEqual(400);
         expect(res.body).toEqual({error: "Registro já cadastrado"});
+    });
+
+    let uuid = "";
+    it('should list doctors', async () => {
+        const res = await request(app).get('/medicos').auth(token, {type: 'bearer'});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body[0]).toHaveProperty('uuid');
+        uuid = res.body[0].uuid;
+        
+    });
+
+    it('should update a doctor', async () => {
+        const res = await request(app).put('/medicos').auth(token, {type: 'bearer'}).send({...doctorObj, uuid: uuid, addressId: 1});
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.message).toEqual("Sucesso");            
+    });
+
+    it('should find a doctor based on uuid', async () => {
+        const res = await request(app).get('/medico').auth(token, {type: 'bearer'}).send({uuid: uuid});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('Speciality');
+    });
+
+    it('should NOT find a doctor based on uuid', async () => {
+        const res = await request(app).get('/medico').auth(token, {type: 'bearer'}).send({uuid: "invalidUuid"});
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('error');
+    });
+
+});
+
+const clientObj = {
+	"name": "Teste",
+	"cpf": "44714032810",
+	"phone": "1234-5678",
+	"cellphone": "1234-5678",
+	"email": "teste@teste.com",
+	"bloodtypesId": 1,
+	"zip_code": "12916423",
+	"address": "Rua teste",
+	"number": "123",
+	"complement": "",
+	"neighborhood": "Bairro teste",
+	"city": "Sao Paulo",
+	"state": "SP"
+}
+
+describe('/cliente(s) route', () => {
+    it('should require authentication', async () => {
+        const res = await request(app).get('/clientes');
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toEqual({ error: "Não autenticado"});
+    });
+
+    it('should create a client', async () => {
+        const res = await request(app).post('/clientes').auth(token, {type: 'bearer'}).send(clientObj);
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.message).toEqual("Sucesso");
+    });
+
+    it('should NOT create a client due NOT UNIQUE cpf', async () => {
+        const res = await request(app).post('/clientes').auth(token, {type: 'bearer'}).send(clientObj);
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toEqual({error: "CPF já cadastrado"});
+    });
+
+    it('should NOT create a client due INVALID cpf', async () => {
+        const res = await request(app).post('/clientes').auth(token, {type: 'bearer'}).send({...clientObj, cpf: "123456"});
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toEqual({error: "CPF não válido!!"});
+    });
+
+    it('should list clients', async () => {
+        const res = await request(app).get('/clientes').auth(token, {type: 'bearer'});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body[0]).toHaveProperty('uuid');
+        uuid = res.body[0].uuid;
+    });
+
+    it('should update a client', async () => {
+        const res = await request(app).put('/clientes').auth(token, {type: 'bearer'}).send({...clientObj, uuid: uuid, addressId: 1});
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.message).toEqual("Sucesso");            
+    });
+
+    it('should find a client based on uuid', async () => {
+        const res = await request(app).get('/cliente').auth(token, {type: 'bearer'}).send({uuid: uuid});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('BloodType');
+    });
+
+    it('should NOT find a client based on uuid', async () => {
+        const res = await request(app).get('/cliente').auth(token, {type: 'bearer'}).send({uuid: "invalidUuid"});
+        expect(res.statusCode).toEqual(400);
+        expect(res.body).toHaveProperty('error');
     });
 });

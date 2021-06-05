@@ -22,21 +22,20 @@ module.exports = {
 
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                     message: 'UUID do Médico não encontrado'
+                    message: 'UUID do Médico não encontrado'
                 })
             }
 
             const doctor = await Doctor.findOne({
                 where: { uuid: req.body.uuid },                                
                 include: [{model: Address}, {model: Speciality, attributes: ['description']}]
-                //include: {all:true}
       
             });
            
-            res.status(200).send(doctor); 
+            res.status(200).json(doctor); 
 
         } catch (error) {
-            res.status(400).send(error.message)        
+            res.status(400).json({error: error.message})        
         }
 
     },
@@ -171,15 +170,14 @@ module.exports = {
                 include: Address
             });
             
-            res.status(201).send(DoctorUpdate)
+            res.status(201).json({ message: "Sucesso", DoctorUpdate})
 
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).json({error: error.message});
             
         }
 
     }
-
 
 }
