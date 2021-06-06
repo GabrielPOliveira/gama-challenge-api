@@ -5,11 +5,12 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Client extends Model {
 
-    static associate({ BloodType, Address }) {
+    static associate({ BloodType, Address, Appointment, MedicalRecords }) {
       // define association here
       this.belongsTo(BloodType, {foreignKey: 'bloodtypesId'});
       this.belongsTo(Address, {foreignKey: 'addressId'});
-
+      this.belongsTo(MedicalRecords, {foreignKey: 'medicalRecordsId'});
+      this.hasMany(Appointment, {foreignKey: 'clientsId'});
     }
     toJSON(){
       return { ...this.get(), id: undefined }

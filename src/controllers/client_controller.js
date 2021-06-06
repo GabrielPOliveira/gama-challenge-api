@@ -1,4 +1,4 @@
-const { Client, Address, BloodType } = require('../models');
+const { Client, Doctor, Address, BloodType, MedicalRecords, MedicalHistory } = require('../models');
 const CPF = require("@fnando/cpf/commonjs");
 const  Yup  = require('yup');
 
@@ -100,6 +100,11 @@ module.exports = {
             if(!addressClient){               
                 return res.status(400).send(error.message)
             }
+
+            const medicalRecords = await MedicalRecords.create({
+                opening_date: new Date()
+            });
+
             const client = await Client.create({
                 name, 
                 cpf, 
@@ -107,7 +112,8 @@ module.exports = {
                 cellphone, 
                 email, 
                 bloodtypesId,
-                addressId: addressClient.id
+                addressId: addressClient.id,
+                medicalRecordsId: medicalRecords.id,
             });
 
             
@@ -194,6 +200,31 @@ module.exports = {
         } catch (error) {
             res.status(400).send(error.message)
         }
+    },
+
+    getMedicalRecords: async(req, res) => {
+
+        try {
+            
+            const { uuid } = req.params;
+            const client = await Client.findOne({where: {uuid: uuid}})
+
+            const medicalRecord = await MedicalRecords.findOne({
+                where: { id: client.medicalRecordsId },                
+                include: [{model: MedicalHistory}]
+            });
+
+            res.status(200).json({message: "Sucesso", medicalRecord});
+
+            
+
+        } catch (error) {
+            res.status(400).json({error: error.message})
+        
+        }
+
+
+
     }
 
     
