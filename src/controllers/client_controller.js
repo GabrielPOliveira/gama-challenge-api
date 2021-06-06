@@ -29,7 +29,7 @@ module.exports = {
 
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                     message: 'UUID do usuário não encontrado'
+                    message: 'UUID do usuário não encontrado'
                 })
             }
 
@@ -39,10 +39,10 @@ module.exports = {
 
             });
            
-            res.status(200).send(client); 
+            res.status(200).json(client); 
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).json({error: error.message});
         }
 
 
@@ -57,11 +57,11 @@ module.exports = {
             
             const cpfExists = await Client.findOne({ where:{ cpf: cpf }});            
             if (cpfExists != null){
-                    return res.status(400).send("CPF já cadastrado");
+                    return res.status(400).json({error: "CPF já cadastrado"});
             }else {
 
                if(!CPF.isValid(cpf)){                  
-                   return res.status(400).send("CPF não válido!!");
+                   return res.status(400).json({error: "CPF não válido!!"});
                }
             }
 
@@ -97,6 +97,7 @@ module.exports = {
                 city,
                 state
             });
+          
             if(!addressClient){               
                 return res.status(400).send(error.message)
             }
@@ -105,6 +106,7 @@ module.exports = {
                 opening_date: new Date()
             });
 
+            
             const client = await Client.create({
                 name, 
                 cpf, 
@@ -115,12 +117,11 @@ module.exports = {
                 addressId: addressClient.id,
                 medicalRecordsId: medicalRecords.id,
             });
-
-            
-            res.status(201).send(client);
+           
+            res.status(201).json({message: 'Sucesso', client});
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).json({error: error.message});
         }
 
     },
@@ -168,7 +169,7 @@ module.exports = {
 
                 }else if(!CPF.isValid(cpf)){
                                       
-                    return res.status(400).send("CPF não válido!!");                    
+                    return res.status(400).json({error: "CPF não válido!!"});                    
                 }
             }
             
@@ -195,10 +196,10 @@ module.exports = {
                 include: Address
             });
             
-            res.status(201).send(ClientUpdate)
+            res.status(201).json({message: 'Sucesso', ClientUpdate});
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).json({error: error.message});
         }
     },
 
