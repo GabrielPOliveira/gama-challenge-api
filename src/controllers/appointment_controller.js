@@ -1,4 +1,4 @@
-const { Client, Doctor, Appointment, MedicalHistory } = require('../models');
+const { Client, Doctor, Appointment, AppointmentStatus, MedicalHistory } = require('../models');
 const  Yup  = require('yup');
 
 module.exports = {
@@ -18,6 +18,30 @@ module.exports = {
         }
        
         
+    },
+
+    find: async(req,res) => {
+        
+        try {
+            const { uuid } = req.params;
+
+            const appointments = await Appointment.findOne({
+                where: { uuid: uuid },                                
+                include: [
+                    {model: Client, attributes: ['name']},
+                    {model: Doctor, attributes: ['name', 'register']},
+                    {model: AppointmentStatus, attributes: ['status']},
+
+                ]
+            });
+            
+
+            res.status(200).json({message: "Sucesso", appointments});
+
+        } catch (error) {
+            res.status(400).json({error: error.message})
+            
+        }
     },
 
     create: async(req,res) => {
