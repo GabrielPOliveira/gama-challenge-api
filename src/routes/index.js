@@ -18,14 +18,14 @@ router.get('/list', UserController.read);
 router.put('/update', UserController.update);
 
 router.get('/clientes', ClientController.index);
-router.get('/cliente', ClientController.find);
+router.get('/cliente/:uuid', ClientController.find);
 router.post('/clientes', ClientController.create);
-router.put('/clientes', ClientController.update);
+router.put('/clientes/:uuid', ClientController.update);
 
 router.get('/medicos', DoctorController.index);
-router.get('/medico', DoctorController.find);
+router.get('/medico/:id', DoctorController.find);
 router.post('/medicos', DoctorController.create);
-router.put('/medicos', DoctorController.update);
+router.put('/medicos/:uuid', DoctorController.update);
 
 
 

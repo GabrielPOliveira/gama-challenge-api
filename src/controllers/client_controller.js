@@ -24,20 +24,24 @@ module.exports = {
         try {
             
             const schema = Yup.object().shape({
-                uuid: Yup.string().required()
+                uuid: Yup.string().required().uuid()
             });
 
-            if (!(await schema.isValid(req.body))){
+            if (!(await schema.isValid(req.params))){
                 return res.status(400).json({
-                    message: 'UUID do usuário não encontrado'
+                    error: 'UUID inválido.'
                 })
             }
 
             const client = await Client.findOne({
-                where: { uuid: req.body.uuid },                                
+                where: { uuid: req.params.uuid },                                
                 include: [{model: Address}, {model: BloodType, attributes: ['type']}]
 
             });
+
+            if (!client){
+                return res.status(400).json({error: 'Cliente não encontrado.'});
+            }
            
             res.status(200).json(client); 
 
@@ -84,7 +88,7 @@ module.exports = {
                                     
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                     message: 'Falha na validação'
+                    error: 'Falha na validação'
                 })
             }
 
@@ -138,13 +142,14 @@ module.exports = {
                 state: Yup.string().required(),                
             });
                                     
-            if (!(await schema.isValid(req.body))){
+            const uuid = req.params.uuid;
+            if (!(await schema.isValid(req.body)) || !uuid){
                 return res.status(400).json({
-                     message: 'Falha na validação'
+                    error: 'Falha na validação'
                 })
             }
 
-            const {uuid, name, cpf, phone, cellphone, email, bloodtypesId, addressId} = req.body;
+            const {name, cpf, phone, cellphone, email, bloodtypesId, addressId} = req.body;
             const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
 
             const client = await Client.findOne({where: {uuid: uuid}})
