@@ -5,13 +5,15 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Doctor extends Model {
 
-    static associate({Speciality, Address}) {
+    static associate({Speciality, Address, Appointment, MedicalHistory}) {
       this.belongsTo(Speciality, {foreignKey: 'specialitiesId'});
       this.belongsTo(Address, {foreignKey: 'addressId'});
+      this.hasMany(Appointment, {foreignKey: 'doctorsId'});
+      this.hasMany(MedicalHistory, {foreignKey: 'doctorsId'});
     }
-    toJSON(){
-      return { ...this.get(), id: undefined }
-    }
+  
+
+    
   };
   Doctor.init({
     uuid: {

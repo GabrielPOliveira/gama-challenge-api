@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, DataTypes) => {
-    await queryInterface.createTable('clients', {
+    await queryInterface.createTable('appointments', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,37 +9,28 @@ module.exports = {
         type: DataTypes.INTEGER
       },
       uuid: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4
+        type: DataTypes.UUID
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      scheduling_date: {
+        type: DataTypes.DATE
       },
-      cpf: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      appointment_date: {
+        type: DataTypes.DATE
       },
-      phone: {
-        type: DataTypes.STRING
+      value: {
+        type: DataTypes.FLOAT(10,2)
       },
-      cellphone: {
-        type: DataTypes.STRING
-      },
-      email: {
-        type: DataTypes.STRING
-      },
-      bloodtypesId: {
+      appointments_statusId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      addressId: {
+      clientsId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      medicalRecordsId: {
+      doctorsId:{
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -52,6 +43,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, DataTypes) => {
-    await queryInterface.dropTable('clients');
+    await queryInterface.dropTable('appointments');
   }
 };
