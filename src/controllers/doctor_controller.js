@@ -4,58 +4,51 @@ const  Yup  = require('yup');
 module.exports = {
 
     index: async(req,res) => {
-        try {
-            
+        try {       
             const doctors = await Doctor.findAll();
 
-            res.status(200).send(doctors); 
-
+            res.status(200).json(doctors); 
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).json({error: error.message})
         }
     },
 
     find: async(req, res) => {
-
-        try {
-            
+        try {           
             const schema = Yup.object().shape({
                 uuid: Yup.string().required()
             });
 
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                     message: 'UUID do Médico não encontrado'
+                    message: 'UUID do Médico não encontrado'
                 })
             }
 
             const doctor = await Doctor.findOne({
                 where: { uuid: req.body.uuid },                                
                 include: [{model: Address}, {model: Speciality, attributes: ['description']}]
-                //include: {all:true}
-                 
+      
             });
            
-            res.status(200).send(doctor); 
-
+            res.status(200).json(doctor); 
 
         } catch (error) {
-            res.status(400).send(error.message)        
+            res.status(400).json({error: error.message})        
         }
 
     },
 
     create: async(req, res) => {
-
         try {
-            
+
             const {name, register, phone, cellphone, email, specialitiesId} = req.body;
             const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
 
             const registerExists = await Doctor.findOne({ where:{ register: register }});            
             if (registerExists != null){
-                    return res.status(400).send("Registro já cadastrado");
+                    return res.status(400).json({error: "Registro já cadastrado"});
             }
 
             const schema = Yup.object().shape({
@@ -103,10 +96,8 @@ module.exports = {
                 specialitiesId,
                 addressId: addressDoctor.id
             });
-
             
-            res.status(201).send(doctor);
-
+            res.status(201).json({message: "Sucesso", doctor});
 
         } catch (error) {
             res.status(400).send(error.message)
@@ -115,9 +106,8 @@ module.exports = {
     },
 
     update: async(req, res) => {
-
         try {
-            
+
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
                 register: Yup.string().required(),
@@ -164,6 +154,7 @@ module.exports = {
                 email: email, 
                 specialitiesId: specialitiesId,                
             });
+            
             const addressDoctor = await Address.update({
                 zip_code: zip_code,
                 address: address,
@@ -179,15 +170,14 @@ module.exports = {
                 include: Address
             });
             
-            res.status(201).send(DoctorUpdate)
+            res.status(201).json({ message: "Sucesso", DoctorUpdate})
 
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).json({error: error.message});
             
         }
 
     }
-
 
 }
