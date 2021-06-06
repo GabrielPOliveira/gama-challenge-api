@@ -33,7 +33,8 @@ router.post('/medicos', DoctorController.create);
 router.put('/medicos', DoctorController.update);
 
 
-router.get('/consulta', AppointmentController.index);
+router.get('/consultas', AppointmentController.index);
+router.get('/consulta/:uuid', AppointmentController.find);
 router.post('/agendarConsulta', AppointmentController.create);
 router.put('/alterarConsulta/:uuid', AppointmentController.update);
 router.post('/realizarConsulta/:uuid', AppointmentController.endAppointment);

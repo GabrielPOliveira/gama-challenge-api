@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(Appointment, {foreignKey: 'doctorsId'});
       this.hasMany(MedicalHistory, {foreignKey: 'doctorsId'});
     }
-    toJSON(){
-      return { ...this.get(), id: undefined }
-    }
+  
+
+    
   };
   Doctor.init({
     uuid: {
