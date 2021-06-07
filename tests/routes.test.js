@@ -249,3 +249,31 @@ describe('/cliente(s) route', () => {
         expect(res.body).toHaveProperty('error');
     });
 });
+
+describe('/tipos Route', () => {
+    it('should require authentication', async () => {
+        const res = await request(app).get('/tipos');
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toEqual({ error: "Não autenticado"});
+    });
+
+    it('should list all bloodtypes', async () => {
+        const res = await request(app).get('/tipos').auth(token, {type: 'bearer'});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toBeInstanceOf(Array);
+    });
+});
+
+describe('/especialidades Route', () => {
+    it('should require authentication', async () => {
+        const res = await request(app).get('/tipos');
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toEqual({ error: "Não autenticado"});
+    });
+
+    it('should list all specialities', async () => {
+        const res = await request(app).get('/especialidades').auth(token, {type: 'bearer'});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toBeInstanceOf(Array);
+    });
+});
