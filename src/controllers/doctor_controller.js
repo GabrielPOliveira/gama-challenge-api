@@ -17,20 +17,24 @@ module.exports = {
     find: async(req, res) => {
         try {           
             const schema = Yup.object().shape({
-                uuid: Yup.string().required()
+                id: Yup.number().required()
             });
 
-            if (!(await schema.isValid(req.body))){
+            if (!(await schema.isValid(req.params))){
                 return res.status(400).json({
-                    message: 'UUID do Médico não encontrado'
+                    error: 'ID inválido.'
                 })
             }
 
             const doctor = await Doctor.findOne({
-                where: { uuid: req.body.uuid },                                
+                where: { id: req.params.id },                                
                 include: [{model: Address}, {model: Speciality, attributes: ['description']}]
       
             });
+
+            if(!doctor){
+                return res.status(400).json({error: 'Médico não encontrado.'});
+            }
            
             res.status(200).json(doctor); 
 
@@ -70,7 +74,7 @@ module.exports = {
                                     
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                     message: 'Falha na validação'
+                    error: 'Falha na validação'
                 })
             }
 
@@ -83,8 +87,9 @@ module.exports = {
                 city,
                 state
             });
+            
             if(!addressDoctor){               
-                return res.status(400).send(error.message)
+                throw new Error();
             }
 
             const doctor = await Doctor.create({
@@ -125,13 +130,14 @@ module.exports = {
                 state: Yup.string().required(),                
             });
 
-            if (!(await schema.isValid(req.body))){
+            const uuid = req.params.uuid;
+            if (!(await schema.isValid(req.body)) || !uuid){
                 return res.status(400).json({
-                     message: 'Falha na validação'
+                    error: 'Falha na validação'
                 })
             }
 
-            const {uuid, name, register, phone, cellphone, email, specialitiesId, addressId} = req.body;
+            const {name, register, phone, cellphone, email, specialitiesId, addressId} = req.body;
             const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
 
             const doctor = await Doctor.findOne({where: {uuid: uuid}})
