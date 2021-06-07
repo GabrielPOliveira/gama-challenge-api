@@ -7,6 +7,8 @@ const ClientController = require('../controllers/client_controller.js');
 const DoctorController = require('../controllers/doctor_controller');
 const AppointmentController = require('../controllers/appointment_controller');
 const StatusController = require('../controllers/status_controller');
+const BloodTypesController = require('../controllers/bloodtypes_controller');
+const SpecialityController = require('../controllers/speciality_controller');
 
 
 const AuthMiddleware = require('../middlewares/auth');
@@ -17,7 +19,7 @@ router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
 
 
-//router.use(AuthMiddleware);
+router.use(AuthMiddleware);
 router.get('/list', UserController.read);
 router.put('/update', UserController.update);
 
@@ -40,6 +42,9 @@ router.put('/alterarConsulta/:uuid', AppointmentController.update);
 router.post('/realizarConsulta/:uuid', AppointmentController.endAppointment);
 
 router.get('/status', StatusController.index);
+
+router.get('/tipos', BloodTypesController.index);
+router.get('/especialidades', SpecialityController.index);
 
 
 module.exports = router;
