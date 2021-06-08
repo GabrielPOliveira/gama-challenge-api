@@ -10,11 +10,15 @@ const StatusController = require('../controllers/status_controller');
 const BloodTypesController = require('../controllers/bloodtypes_controller');
 const SpecialityController = require('../controllers/speciality_controller');
 
-
 const AuthMiddleware = require('../middlewares/auth');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 router.get('/', HomeController.index);
+router.use('/api-docs', swaggerUi.serve);
+router.get('/api-docs', swaggerUi.setup(swaggerDocument));
+
 router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
 
