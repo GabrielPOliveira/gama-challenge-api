@@ -1,4 +1,5 @@
 const request = require('supertest');
+const { date } = require('yup');
 const app = require('../app');
 const { sequelize } = require('../src/models');
 
@@ -275,5 +276,58 @@ describe('/especialidades Route', () => {
         const res = await request(app).get('/especialidades').auth(token, {type: 'bearer'});
         expect(res.statusCode).toEqual(200);
         expect(res.body).toBeInstanceOf(Array);
+    });
+});
+
+const consultasObj = {
+	"scheduling_date": "2021-06-08T20:26:34.330",
+	"value": 200,
+	"clientsId": 1,
+	"doctorsId": 1,
+	"appointments_statusId": 1
+};
+
+describe('Consulta(s) Route', () => {
+    it('should require authentication', async () => {
+        const res = await request(app).get('/consultas');
+        expect(res.statusCode).toEqual(401);
+        expect(res.body).toEqual({ error: "Não autenticado"});
+    });
+
+    it('should schedule an appointment', async () => {
+        const res = await request(app).post('/agendarConsulta').auth(token, {type: 'bearer'}).send(consultasObj);
+        expect(res.statusCode).toEqual(201);
+        expect(res.body).toHaveProperty('message');
+    });
+
+    it('should list all appointments', async () => {
+        const res = await request(app).get('/consultas').auth(token, {type: 'bearer'});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('appointments');
+        uuid = res.body.appointments[0].uuid;
+    });
+
+    it('should find an appointment based on uuid', async () => {
+        const res = await request(app).get(`/consulta/${uuid}`).auth(token, {type: 'bearer'});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('message');
+    });
+
+    it('should update an appointment', async () => {
+        const res = await request(app).put(`/alterarConsulta/${uuid}`).auth(token, {type: 'bearer'}).send({...consultasObj, value: 500});
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('message');
+    });
+
+    it('should end an appointment', async () => {
+        const res = await request(app).post(`/realizarConsulta/${uuid}`).auth(token, {type: 'bearer'}).send({
+            description: "Teste",
+	        appointment_date: new Date(),
+	        clientsId: 1,
+	        doctorsId: 1,
+	        appointments_statusId: 2
+        });
+        expect(res.statusCode).toEqual(201);
+        expect(res.body).toHaveProperty('medicalHistory');
     });
 });
