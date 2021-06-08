@@ -60,7 +60,7 @@ module.exports = {
 
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                     message: 'Falha na validação'
+                    error: 'Falha na validação'
                 })
             }
             
@@ -79,9 +79,7 @@ module.exports = {
         }catch (error) {            
             res.status(400).json({error: error.message})
 
-        }
-
-    
+        }   
     },
 
     update: async(req,res) => {
@@ -99,9 +97,9 @@ module.exports = {
                 appointments_statusId: Yup.number().required(),                
             });
 
-            if (!(await schema.isValid(req.body))){
+            if (!(await schema.isValid(req.body)) || !uuid){
                 return res.status(400).json({
-                     message: 'Falha na validação'
+                    error: 'Falha na validação'
                 })
             }
                 
@@ -122,7 +120,6 @@ module.exports = {
             res.status(400).json({error: error.message})
     
         }
-
     },
 
     endAppointment: async(req,res) => { 
@@ -136,7 +133,7 @@ module.exports = {
             
             if(appointments_statusId != 2) {
                 return res.status(400).json({
-                    message: 'Status Inválido'
+                    error: 'Status Inválido'
                 })
             }
 
@@ -147,7 +144,7 @@ module.exports = {
 
             if (!(await schema.isValid(req.body))){
                 return res.status(400).json({
-                    message: 'Falha na validação'
+                    error: 'Falha na validação'
                 })
             }
 
@@ -175,11 +172,5 @@ module.exports = {
             res.status(400).json({error: error.message})
     
         }
-
-
-
     }
-
-
-    
 }
