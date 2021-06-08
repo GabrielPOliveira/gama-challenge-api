@@ -164,19 +164,19 @@ describe('/medicos(s) route', () => {
     });
 
     it('should update a doctor', async () => {
-        const res = await request(app).put('/medicos').auth(token, {type: 'bearer'}).send({...doctorObj, uuid: uuid, addressId: 1});
+        const res = await request(app).put(`/medicos/${uuid}`).auth(token, {type: 'bearer'}).send({...doctorObj, addressId: 1});
         expect(res.statusCode).toEqual(201);
         expect(res.body.message).toEqual("Sucesso");            
     });
 
-    it('should find a doctor based on uuid', async () => {
-        const res = await request(app).get('/medico').auth(token, {type: 'bearer'}).send({uuid: uuid});
+    it('should find a doctor based on id', async () => {
+        const res = await request(app).get('/medico/1').auth(token, {type: 'bearer'});
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('Speciality');
     });
 
-    it('should NOT find a doctor based on uuid', async () => {
-        const res = await request(app).get('/medico').auth(token, {type: 'bearer'}).send({uuid: "invalidUuid"});
+    it('should NOT find a doctor based on id', async () => {
+        const res = await request(app).get('/medico/0').auth(token, {type: 'bearer'}).send();
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('error');
     });
@@ -232,19 +232,19 @@ describe('/cliente(s) route', () => {
     });
 
     it('should update a client', async () => {
-        const res = await request(app).put('/clientes').auth(token, {type: 'bearer'}).send({...clientObj, uuid: uuid, addressId: 1});
+        const res = await request(app).put(`/clientes/${uuid}`).auth(token, {type: 'bearer'}).send({...clientObj,addressId: 1});
         expect(res.statusCode).toEqual(201);
         expect(res.body.message).toEqual("Sucesso");            
     });
 
     it('should find a client based on uuid', async () => {
-        const res = await request(app).get('/cliente').auth(token, {type: 'bearer'}).send({uuid: uuid});
+        const res = await request(app).get(`/cliente/${uuid}`).auth(token, {type: 'bearer'});
         expect(res.statusCode).toEqual(200);
         expect(res.body).toHaveProperty('BloodType');
     });
 
     it('should NOT find a client based on uuid', async () => {
-        const res = await request(app).get('/cliente').auth(token, {type: 'bearer'}).send({uuid: "invalidUuid"});
+        const res = await request(app).get(`/cliente/123`).auth(token, {type: 'bearer'});
         expect(res.statusCode).toEqual(400);
         expect(res.body).toHaveProperty('error');
     });
