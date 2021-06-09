@@ -5,7 +5,7 @@
         "version": "1.0.0",
         "title": "Desafio AfyaLabs API"        
     },
-    "host": "petstore.swagger.io",
+    "host": "https://labteam-api.herokuapp.com",
     "basePath": "/",
     "tags": [
         {
@@ -27,7 +27,8 @@
         }
     ],
     "schemes": [
-        "http"
+        "http",
+        "https"
     ],
     "paths": {
         "/registrar": {

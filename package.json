@@ -11,7 +11,10 @@
     "migrate": "npx sequelize-cli db:migrate",
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
-    "pretest": "cross-env NODE_ENV=test npm run migrate:reset"
+    "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
+    "migrate-prod": "cross-env NODE_ENV=production npx sequelize-cli db:migrate",
+    "seed-prod": "cross-env NODE_ENV=production npx sequelize-cli db:seed:all",
+    "undo-prod": "cross-env NODE_ENV=production npx sequelize-cli db:migrate:undo:all"
   },
   "jest": {
     "testEnvironment": "node",
@@ -36,7 +39,6 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@types/yup": "^0.29.11",
     "cross-env": "^7.0.3",
     "jest": "^27.0.3",
     "nodemon": "~2.0.7",
