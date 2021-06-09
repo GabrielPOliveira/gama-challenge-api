@@ -8,13 +8,11 @@ module.exports = {
         try {
 
             const clients = await Client.findAll();
-            
-            // console.log(clients.every(client => client instanceof Client)); // true
-            // console.log("All clients:", JSON.stringify(clients, null, 2));
-            res.status(200).send(clients); 
+
+            res.status(200).json(clients); 
 
         } catch (error) {
-            res.status(400).send(error.message)
+            res.status(400).json(error.message)
         }
         
     },

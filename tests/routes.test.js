@@ -104,7 +104,7 @@ describe('/update route', () => {
 
     it('should NOT update the password due to invalid current password', async () => {
         const res = await request(app).put('/update').auth(token, { type: 'bearer' }).send({ ...updateObj, currentPassword: "teste12"});
-        expect(res.statusCode).toEqual(401);
+        expect(res.statusCode).toEqual(403);
         expect(res.body).toEqual({ error: "Senha atual incorreta."});
     });
 
