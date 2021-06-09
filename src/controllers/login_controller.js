@@ -23,7 +23,7 @@ module.exports = {
             return res.json({ user: {login, id}, token});
             
         } catch (error) {
-            res.status(401).json({ error: "Usuário ou senha inválidos." })
+            res.status(401).json({ error: error.message })
         }
 
     }
