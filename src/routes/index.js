@@ -19,10 +19,10 @@ router.get('/', HomeController.index);
 router.use('/api-docs', swaggerUi.serve);
 router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
+
+
 router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
-
-
 router.use(AuthMiddleware);
 router.get('/list', UserController.read);
 router.put('/update', UserController.update);
@@ -46,7 +46,6 @@ router.put('/alterarConsulta/:uuid', AppointmentController.update);
 router.post('/realizarConsulta/:uuid', AppointmentController.endAppointment);
 
 router.get('/status', StatusController.index);
-
 router.get('/tipos', BloodTypesController.index);
 router.get('/especialidades', SpecialityController.index);
 
