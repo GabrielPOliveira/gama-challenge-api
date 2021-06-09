@@ -5,7 +5,9 @@
         "version": "1.0.0",
         "title": "Desafio AfyaLabs API"        
     },
+  
     "host": "https://labteam-api.herokuapp.com",
+
     "basePath": "/",
     "tags": [
         {
