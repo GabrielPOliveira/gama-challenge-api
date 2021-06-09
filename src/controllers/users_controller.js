@@ -39,7 +39,7 @@ module.exports = {
     update: async(req, res) => {
         try {
             const schema = Yup.object().shape({
-                login: Yup.string(),
+                login: Yup.string().max(20),
                 currentPassword: Yup.string().min(6),
                 password: Yup.string().min(6).when('currentPassword', (currentPassword, schema) => {
                     return currentPassword ? schema.required() : schema
@@ -67,7 +67,7 @@ module.exports = {
                 const valid = await User.validatePassword(currentPassword, user.password);
                 
                 if (!valid){
-                    return res.status(401).json({ error: "Senha atual incorreta."});
+                    return res.status(403).json({ error: "Senha atual incorreta."});
                 }
             }
 
