@@ -11,7 +11,7 @@ module.exports = {
             const valid = await User.validatePassword(password, user.password)
 
             if (!valid) {
-                throw new Error();
+                return res.status(401).json({error: "Senha incorreta"})
             }
                 
             const id = user.id;
@@ -23,7 +23,7 @@ module.exports = {
             return res.json({ user: {login, id}, token});
             
         } catch (error) {
-            res.status(401).json({ error: "Usuário ou senha inválidos." })
+            res.status(401).json({ error: "Usuário ou senha inválidos" })
         }
 
     }
