@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const cors = require('cors');
 const HomeController = require('../controllers/home_controller');
 const LoginController = require('../controllers/login_controller');
 const UserController = require('../controllers/users_controller');
@@ -15,14 +16,15 @@ const AuthMiddleware = require('../middlewares/auth');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
+router.use(cors());
+
 router.get('/', HomeController.index);
 router.use('/api-docs', swaggerUi.serve);
 router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
-
-
 router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
+
 router.use(AuthMiddleware);
 router.get('/list', UserController.read);
 router.put('/update', UserController.update);
