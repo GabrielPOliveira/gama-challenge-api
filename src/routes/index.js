@@ -24,6 +24,7 @@ router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 router.post('/registrar', UserController.create);
 router.post('/logar', LoginController.login);
+
 router.use(AuthMiddleware);
 router.get('/list', UserController.read);
 router.put('/update', UserController.update);
