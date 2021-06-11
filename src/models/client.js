@@ -12,9 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(MedicalRecords, {foreignKey: 'medicalRecordsId'});
       this.hasMany(Appointment, {foreignKey: 'clientsId'});
     }
-    toJSON(){
-      return { ...this.get(), id: undefined }
-    }
+    
   };
   Client.init({
       uuid: {
