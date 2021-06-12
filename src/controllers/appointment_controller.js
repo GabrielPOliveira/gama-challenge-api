@@ -62,7 +62,7 @@ module.exports = {
                 value: Yup.number(),
                 clientsId: Yup.number().required(),
                 doctorsId: Yup.number().required(),
-                appointments_statusId: Yup.number().required(),                
+                appointments_statusId: Yup.number().required().min(1).max(3)                
             });
 
             if (!(await schema.isValid(req.body))){
