@@ -48,8 +48,7 @@ module.exports = {
 
     create: async(req, res) => {
         try {
-
-            const typeMedico = 2;
+            
 
             const {name, register, phone, cellphone, email, specialitiesId, login, password} = req.body;
             const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
@@ -104,15 +103,7 @@ module.exports = {
             
             if(!addressDoctor){               
                 throw new Error();
-            }
-
-
-            const userMedico = await User.create({    
-                name,           
-                login,
-                password,
-                type: typeMedico,
-            });
+            }        
             
             const doctor = await Doctor.create({
                 name, 
@@ -122,6 +113,13 @@ module.exports = {
                 email, 
                 specialitiesId,
                 addressId: addressDoctor.id
+            });
+
+            const userMedico = await User.create({    
+                name,           
+                login,
+                password,
+                type: doctor.id,
             });
             
             res.status(201).json({message: "Sucesso", doctor});

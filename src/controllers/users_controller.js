@@ -10,7 +10,7 @@ module.exports = {
                 login: Yup.string().required().max(20),
                 password: Yup.string().required().min(6),
                 name: Yup.string().required(),
-                type: Yup.number().required().min(1).max(2)
+                type: Yup.number().required(),
             })
 
             if (!(await schema.isValid(req.body))){
