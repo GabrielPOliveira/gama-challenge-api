@@ -5,7 +5,9 @@ module.exports = {
 
     index: async(req,res) => {
         try {       
-            const doctors = await Doctor.findAll();
+            const doctors = await Doctor.findAll({
+                include: [{model: Speciality, attributes: ['description']}]
+            });
 
             res.status(200).json(doctors); 
 
