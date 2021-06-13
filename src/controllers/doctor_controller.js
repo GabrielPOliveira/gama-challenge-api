@@ -1,4 +1,4 @@
-const { Doctor, Address, Speciality } = require('../models');
+const { Doctor, Address, Speciality, User } = require('../models');
 const  Yup  = require('yup');
 
 module.exports = {
@@ -49,7 +49,9 @@ module.exports = {
     create: async(req, res) => {
         try {
 
-            const {name, register, phone, cellphone, email, specialitiesId} = req.body;
+            const typeMedico = 2;
+
+            const {name, register, phone, cellphone, email, specialitiesId, login, password} = req.body;
             const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
 
             const registerExists = await Doctor.findOne({ where:{ register: register }});            
@@ -71,7 +73,11 @@ module.exports = {
                 complement: Yup.string(),
                 neighborhood: Yup.string().required(),
                 city: Yup.string().required(),
-                state: Yup.string().required(),                
+                state: Yup.string().required(),  
+                
+                login: Yup.string().required().max(20),
+                password: Yup.string().required().min(6),
+                
             });
                                     
             if (!(await schema.isValid(req.body))){
@@ -79,7 +85,13 @@ module.exports = {
                     error: 'Falha na validação'
                 })
             }
+            
+            const loginExists = await User.findOne({ where: { login: req.body.login }});
 
+            if (loginExists){
+                return res.status(400).json({ error: "Usuário já cadastrado" });
+            }
+            
             const addressDoctor = await Address.create({
                 zip_code,
                 address,
@@ -94,6 +106,14 @@ module.exports = {
                 throw new Error();
             }
 
+
+            const userMedico = await User.create({    
+                name,           
+                login,
+                password,
+                type: typeMedico,
+            });
+            
             const doctor = await Doctor.create({
                 name, 
                 register, 
