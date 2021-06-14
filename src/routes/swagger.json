@@ -767,16 +767,15 @@
         },
         "Atualização de usuário": {
             "type": "object",
-            "optional": [
-                "login",
+            "required": [
+                "id",
                 "currentPassword",
                 "password",
                 "passwordConfirmation"
             ],
             "properties": {
-                "login": {
-                    "type": "string",
-                    "maxLenght": 20 
+                "id": {
+                    "type": "number" 
                 },
                 "currentPassword": {
                     "type": "string"

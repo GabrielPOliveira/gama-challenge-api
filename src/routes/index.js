@@ -27,7 +27,7 @@ router.post('/logar', LoginController.login);
 
 router.use(AuthMiddleware);
 router.get('/list', UserController.read);
-router.put('/update', UserController.update);
+router.put('/usuario/atualizar', UserController.update);
 
 router.get('/clientes', ClientController.index);
 router.get('/cliente/:uuid', ClientController.find);
