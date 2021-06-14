@@ -77,7 +77,7 @@ describe('/logar route', () => {
 });
 
 const updateObj = {
-    //login: "teste",
+    id: 1,
     currentPassword: "teste123",
     password: "teste1234",
     passwordConfirmation: "teste1234"
@@ -88,19 +88,6 @@ describe('/update route', () => {
         expect(res.statusCode).toEqual(401);
         expect(res.body).toEqual({ error: "Não autenticado"});
     });
-
-    it('should NOT update the login due to repeated login', async () => {
-        const res = await request(app).put('/update').auth(token, { type: 'bearer' }).send({ login: "teste"});
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toEqual({ error: "Login em uso."});
-    });
-
-    it('should update the login', async () => {
-        const res = await request(app).put('/update').auth(token, { type: 'bearer' }).send({ login: "newLogin"});
-        expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual('Sucesso');
-    });
-
 
     it('should NOT update the password due to invalid current password', async () => {
         const res = await request(app).put('/update').auth(token, { type: 'bearer' }).send({ ...updateObj, currentPassword: "teste12"});
@@ -321,7 +308,7 @@ describe('Consulta(s) Route', () => {
 
     it('should end an appointment', async () => {
         const res = await request(app).post(`/realizarConsulta/${uuid}`).auth(token, {type: 'bearer'}).send({
-            description: "Teste",
+            deion: "Teste",
 	        appointment_date: new Date(),
 	        clientsId: 1,
 	        doctorsId: 1,

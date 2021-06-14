@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API de autenticação e controle de dados",
+        "deion": "API de autenticação e controle de dados",
         "version": "1.0.0",
         "title": "Desafio AfyaLabs API"        
     },
@@ -11,20 +11,20 @@
     "tags": [
         {
             "name": "Usuários",
-            "description": "Autenticação e controle do usuário."
+            "deion": "Autenticação e controle do usuário."
 
         },
         {
             "name": "Clientes",
-            "description": "Controle dos clientes."
+            "deion": "Controle dos clientes."
         },
         {
             "name": "Médicos",
-            "description": "Controle dos médicos."
+            "deion": "Controle dos médicos."
         },
         {
             "name": "Consultas",
-            "description": "Controle das consultas."
+            "deion": "Controle das consultas."
         }
     ],
     "schemes": [
@@ -38,7 +38,7 @@
                     "Usuários"
                 ],
                 "summary": "Adiciona um usuário",
-                "description": "Rota de cadastro de usuários.",
+                "deion": "Rota de cadastro de usuários.",
                 "operationId": "addUser",
                 "consumes": [
                     "application/json"
@@ -50,7 +50,7 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "Objeto do usuário a ser cadastrado",
+                        "deion": "Objeto do usuário a ser cadastrado",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Cadastro de usuário"
@@ -59,10 +59,10 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Usuário cadastrado"
+                        "deion": "Usuário cadastrado"
                     },
                     "400": {
-                        "description": "Não foi possível cadastrar o usuário"
+                        "deion": "Não foi possível cadastrar o usuário"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -76,7 +76,7 @@
                     "Usuários"
                 ],
                 "summary": "Loga na aplicação",
-                "description": "Rota de login de usuários",
+                "deion": "Rota de login de usuários",
                 "operationId": "login",
                 "consumes": [
                     "application/json"
@@ -88,7 +88,7 @@
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto do usuário a logar",
+                        "deion": "Objeto do usuário a logar",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Login de usuário"
@@ -97,10 +97,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Login sucedido"
+                        "deion": "Login sucedido"
                     },
                     "401": {
-                        "description": "Login ou senha inválidos"
+                        "deion": "Login ou senha inválidos"
                     }
                 }
             }
@@ -111,7 +111,7 @@
                     "Usuários"
                 ],
                 "summary": "Atualizar um usuário",
-                "description": "Atualização de login ou senha do usuário. Para atualizar o login, basta preencher o campo 'login'. Para atualizar a senha, basta inserir a senha atual, a nova senha e a confirmação da nova senha.",
+                "deion": "Atualização de login ou senha do usuário. Para atualizar o login, basta preencher o campo 'login'. Para atualizar a senha, basta inserir a senha atual, a nova senha e a confirmação da nova senha.",
                 "operationId": "updateUser",
                 "produces": [
                     "application/json"
@@ -120,7 +120,7 @@
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto da atualização.",
+                        "deion": "Objeto da atualização.",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Atualização de usuário"
@@ -129,16 +129,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Atualização sucedida"
+                        "deion": "Atualização sucedida"
                     },
                     "400": {
-                        "description": "Atualização não sucedida"
+                        "deion": "Atualização não sucedida"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
                     },
                     "403": {
-                        "description": "Atualização não sucedida devido a senha atual incorreta"
+                        "deion": "Atualização não sucedida devido a senha atual incorreta"
                     }
                 },
                 "security": [
@@ -154,17 +154,17 @@
                     "Clientes"
                 ],
                 "summary": "Lista os clientes",
-                "description": "Retorna todos os clientes criados",
+                "deion": "Retorna todos os clientes criados",
                 "operationId": "listClients",
                 "produces": [
                     "application/json"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Listagem sucedida"
+                        "deion": "Listagem sucedida"
                     },
                     "400": {
-                        "description": "Listagem não sucedida"
+                        "deion": "Listagem não sucedida"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -181,7 +181,7 @@
                     "Clientes"
                 ],
                 "summary": "Cadastra um cliente",
-                "description": "",
+                "deion": "",
                 "operationId": "createClient",
                 "consumes": [
                     "application/json"
@@ -193,7 +193,7 @@
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto do cliente a registrar. O CPF é validado.",
+                        "deion": "Objeto do cliente a registrar. O CPF é validado.",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Cadastro de cliente"
@@ -202,10 +202,10 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Cadastro sucedido"
+                        "deion": "Cadastro sucedido"
                     },
                     "400": {
-                        "description": "Não foi possível cadastrar o cliente"
+                        "deion": "Não foi possível cadastrar o cliente"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -224,7 +224,7 @@
                     "Clientes"
                 ],
                 "summary": "Encontra um cliente a partir de seu UUID",
-                "description": "Retorna um objeto com as informações do usuário que possui esse UUID",
+                "deion": "Retorna um objeto com as informações do usuário que possui esse UUID",
                 "operationId": "findClient",
                 "produces": [
                     "application/json"
@@ -233,17 +233,17 @@
                     {
                         "name": "uuid",
                         "in": "path",
-                        "description": "",
+                        "deion": "",
                         "required": true,
                         "type": "uuid"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Cliente encontrado"
+                        "deion": "Cliente encontrado"
                     },
                     "400": {
-                        "description": "Não foi possível encontrar o cliente"
+                        "deion": "Não foi possível encontrar o cliente"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -262,7 +262,7 @@
                     "Clientes"
                 ],
                 "summary": "Atualizar um cliente",
-                "description": "Atualização dos dados de um cliente.",
+                "deion": "Atualização dos dados de um cliente.",
                 "operationId": "updateClient",
                 "consumes": [
                     "application/json"
@@ -274,14 +274,14 @@
                     {
                         "name": "uuid",
                         "in": "path",
-                        "description": "",
+                        "deion": "",
                         "required": true,
                         "type": "uuid"
                     },
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto da atualização.",
+                        "deion": "Objeto da atualização.",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Atualização de cliente"
@@ -290,10 +290,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Atualização sucedida"
+                        "deion": "Atualização sucedida"
                     },
                     "400": {
-                        "description": "Atualização não sucedida"
+                        "deion": "Atualização não sucedida"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -312,7 +312,7 @@
                     "Clientes"
                 ],
                 "summary": "Prontuário do cliente",
-                "description": "Retorna o histórico do prontuário do cliente a partir de seu UUID",
+                "deion": "Retorna o histórico do prontuário do cliente a partir de seu UUID",
                 "operationId": "getMedicalRecords",
                 "produces": [
                     "application/json"
@@ -321,17 +321,17 @@
                     {
                         "name": "uuid",
                         "in": "path",
-                        "description": "",
+                        "deion": "",
                         "required": true,
                         "type": "uuid"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Retorno sucedido"
+                        "deion": "Retorno sucedido"
                     },
                     "400": {
-                        "description": "Não foi possível retornar o histórico"
+                        "deion": "Não foi possível retornar o histórico"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -350,17 +350,17 @@
                     "Médicos"
                 ],
                 "summary": "Lista os médicos",
-                "description": "Retorna todos os médicos cadastrados",
+                "deion": "Retorna todos os médicos cadastrados",
                 "operationId": "listDoctors",
                 "produces": [
                     "application/json"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Listagem de médicos sucedida"
+                        "deion": "Listagem de médicos sucedida"
                     },
                     "400": {
-                        "description": "Não foi possível listar os médicos"
+                        "deion": "Não foi possível listar os médicos"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -377,7 +377,7 @@
                     "Médicos"
                 ],
                 "summary": "Cadastra um médico",
-                "description": "Rota de cadastro de médicos",
+                "deion": "Rota de cadastro de médicos",
                 "operationId": "createDoctor",
                 "consumes": [
                     "application/json"
@@ -389,7 +389,7 @@
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto da atualização.",
+                        "deion": "Objeto da atualização.",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Cadastro de médico"
@@ -403,10 +403,10 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Cadastro sucedido"
+                        "deion": "Cadastro sucedido"
                     },
                     "400": {
-                        "description": "Não foi possível cadastrar o médico"
+                        "deion": "Não foi possível cadastrar o médico"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -420,7 +420,7 @@
                     "Médicos"
                 ],
                 "summary": "Encontra um médico pelo ID",
-                "description": "Retorna os dados do médico a partir de seu id",
+                "deion": "Retorna os dados do médico a partir de seu id",
                 "operationId": "getDoctorByID",
                 "produces": [
                     "application/json"
@@ -429,17 +429,17 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID do médico",
+                        "deion": "ID do médico",
                         "required": true,
                         "type": "integer"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Médico encontrado"
+                        "deion": "Médico encontrado"
                     },
                     "400": {
-                        "description": "Não foi possível encontrar o médico"
+                        "deion": "Não foi possível encontrar o médico"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -458,7 +458,7 @@
                     "Médicos"
                 ],
                 "summary": "Atualizar um médico",
-                "description": "Atualização dos dados de um médico a partir de seu UUID",
+                "deion": "Atualização dos dados de um médico a partir de seu UUID",
                 "operationId": "updateDoctor",
                 "consumes": [
                     "application/json"
@@ -470,14 +470,14 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "",
+                        "deion": "",
                         "required": true,
                         "type": "integer"
                     },
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto da atualização.",
+                        "deion": "Objeto da atualização.",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Atualização de cliente"
@@ -486,10 +486,10 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Atualização sucedida"
+                        "deion": "Atualização sucedida"
                     },
                     "400": {
-                        "description": "Atualização não sucedida"
+                        "deion": "Atualização não sucedida"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -508,17 +508,17 @@
                     "Consultas"
                 ],
                 "summary": "Lista as consultas",
-                "description": "Retorna todas as consultas",
+                "deion": "Retorna todas as consultas",
                 "operationId": "listAppointments",
                 "produces": [
                     "application/json"
                 ],
                 "responses": {
                     "200": {
-                        "description": "Listagem de consultas sucedida"
+                        "deion": "Listagem de consultas sucedida"
                     },
                     "400": {
-                        "description": "Listagem de consultas não sucedida"
+                        "deion": "Listagem de consultas não sucedida"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -537,7 +537,7 @@
                     "Consultas"
                 ],
                 "summary": "Encontra uma consulta pelo UUID",
-                "description": "Retorna os dados da consulta a partir de seu uuid",
+                "deion": "Retorna os dados da consulta a partir de seu uuid",
                 "operationId": "findApoointment",
                 "produces": [
                     "application/json"
@@ -547,16 +547,16 @@
                         "in": "path",
                         "name": "uuid",
                         "type": "uuid",
-                        "description": "",
+                        "deion": "",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Consulta encontrada"
+                        "deion": "Consulta encontrada"
                     },
                     "400": {
-                        "description": "Não foi possível encontrar a consulta"
+                        "deion": "Não foi possível encontrar a consulta"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -575,7 +575,7 @@
                     "Consultas"
                 ],
                 "summary": "Agenda uma consulta",
-                "description": "Rota de agendamento de consulta",
+                "deion": "Rota de agendamento de consulta",
                 "operationId": "createAppointment",
                 "produces": [
                     "application/json"
@@ -584,7 +584,7 @@
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto da consulta a ser agendada",
+                        "deion": "Objeto da consulta a ser agendada",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Agendamento de consulta"
@@ -593,10 +593,10 @@
                 ],
                 "responses": {
                     "201": {
-                        "description": "Agendamento sucedido"
+                        "deion": "Agendamento sucedido"
                     },
                     "400": {
-                        "description": "Não foi possível realizar o agendamento"
+                        "deion": "Não foi possível realizar o agendamento"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -615,7 +615,7 @@
                     "Consultas"
                 ],
                 "summary": "Atualizar uma consulta",
-                "description": "Atualização dos dados de uma consulta a partir de seu UUID",
+                "deion": "Atualização dos dados de uma consulta a partir de seu UUID",
                 "operationId": "updateAppointment",
                 "produces": [
                     "application/json"
@@ -625,13 +625,13 @@
                         "in": "path",
                         "name": "uuid",
                         "type": "uuid",
-                        "description": "",
+                        "deion": "",
                         "required": true
                     },
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto da consulta a ser atualizada",
+                        "deion": "Objeto da consulta a ser atualizada",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Agendamento de consulta"
@@ -640,10 +640,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Atualização sucedida"
+                        "deion": "Atualização sucedida"
                     },
                     "400": {
-                        "description": "Atualização não sucedida"
+                        "deion": "Atualização não sucedida"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -662,7 +662,7 @@
                     "Consultas"
                 ],
                 "summary": "Realiza uma consulta",
-                "description": "",
+                "deion": "",
                 "operationId": "endAppointment",
                 "consumes": [
                     "application/json"
@@ -675,13 +675,13 @@
                         "in": "path",
                         "name": "uuid",
                         "type": "uuid",
-                        "description": "",
+                        "deion": "",
                         "required": true
                     },
                     {
                         "name": "body",
                         "in": "body",
-                        "description": "Objeto da consulta realizada",
+                        "deion": "Objeto da consulta realizada",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/Realização de consulta"
@@ -690,10 +690,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Consulta realizada com sucesso"
+                        "deion": "Consulta realizada com sucesso"
                     },
                     "400": {
-                        "description": "Não foi possível realizar a consulta"
+                        "deion": "Não foi possível realizar a consulta"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
@@ -717,7 +717,7 @@
         },
         "responses": {
             "UnauthorizedError": {
-                "description": "Não autorizado"
+                "deion": "Não autorizado"
             }
         }
     },
@@ -742,7 +742,7 @@
                 },
                 "type": {
                     "type": "number",
-                    "description": "Tipo do usuário.",
+                    "deion": "Tipo do usuário.",
                     "enum": [
                         1,
                         2
@@ -767,16 +767,15 @@
         },
         "Atualização de usuário": {
             "type": "object",
-            "optional": [
-                "login",
+            "required": [
+                "id",
                 "currentPassword",
                 "password",
                 "passwordConfirmation"
             ],
             "properties": {
-                "login": {
-                    "type": "string",
-                    "maxLenght": 20 
+                "id": {
+                    "type": "number" 
                 },
                 "currentPassword": {
                     "type": "string"
@@ -1097,7 +1096,7 @@
             "type": "object",
             "required": [
                 "appointment_date",
-                "description",
+                "deion",
                 "clientsId",
                 "doctorsId",
                 "appointments_statusId"
@@ -1107,7 +1106,7 @@
                     "type": "string",
                     "example": "2021/07/09 20:11:15"
                 },
-                "description": {
+                "deion": {
                     "type": "string"
                 },
                 "clientsId": {
@@ -1127,7 +1126,7 @@
         }
     },
     "externalDocs": {
-        "description": "Find out more about Swagger",
+        "deion": "Find out more about Swagger",
         "url": "http://swagger.io"
     }
 }

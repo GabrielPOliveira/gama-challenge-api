@@ -10,7 +10,7 @@ module.exports = {
                 login: Yup.string().required().max(20),
                 password: Yup.string().required().min(6),
                 name: Yup.string().required(),
-                type: Yup.number().required().min(1).max(2)
+                type: Yup.number().required(),
             })
 
             if (!(await schema.isValid(req.body))){
@@ -39,7 +39,7 @@ module.exports = {
     update: async(req, res) => {
         try {
             const schema = Yup.object().shape({
-                login: Yup.string().max(20),
+                id: Yup.number().required(),
                 currentPassword: Yup.string().min(6),
                 password: Yup.string().min(6).when('currentPassword', (currentPassword, schema) => {
                     return currentPassword ? schema.required() : schema
@@ -53,14 +53,11 @@ module.exports = {
                 return res.status(400).json({error: "Entradas inválidas."})
             }
 
-            const user = await User.findByPk(req.userId);
+            let { id, password, currentPassword } = req.body;
+            const user = await User.findByPk(id);
 
-            let { login, password, currentPassword } = req.body;
-
-            if (login){
-                const loginExists = await User.findOne({ where : {login}});
-
-                if (loginExists) return res.status(400).json({ error: "Login em uso."});
+            if (!(id === req.userId)){
+                return res.status(401).json({error: "Entradas inválidas."})
             }
 
             if (currentPassword){
@@ -71,12 +68,11 @@ module.exports = {
                 }
             }
 
-            let options = { where: {id: req.userId}, returning: true}
+            let options = { where: {id}, returning: true}
             password ? options = {...options, individualHooks : true} : options = { ...options, individualHooks : false};
     
             await User.update(req.body, options).then( result => {
                 login = result[1][0].login;
-                const id = req.userId;
                 return res.status(200).json({ message: "Sucesso", login, id})
             })
             
