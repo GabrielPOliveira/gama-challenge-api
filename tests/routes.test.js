@@ -35,12 +35,6 @@ describe('/registrar route', () => {
         
     });
 
-    it('should NOT create a new user due to invalid type', async () => {
-        const res = await request(app).post('/registrar').send({...registerObj, type: 3});
-        expect(res.statusCode).toEqual(400);
-        expect(res.body).toEqual({ error: "Entradas inválidas."});
-    });
-
     it('should NOT create a new user due to null param', async () => {
         const res = await request(app).post('/registrar').send({...registerObj, login: null});
         expect(res.statusCode).toEqual(400);
@@ -84,25 +78,25 @@ const updateObj = {
 }
 describe('/update route', () => {
     it('should require authentication', async () => {
-        const res = await request(app).put('/update');
+        const res = await request(app).put('/usuario/atualizar');
         expect(res.statusCode).toEqual(401);
         expect(res.body).toEqual({ error: "Não autenticado"});
     });
 
     it('should NOT update the password due to invalid current password', async () => {
-        const res = await request(app).put('/update').auth(token, { type: 'bearer' }).send({ ...updateObj, currentPassword: "teste12"});
+        const res = await request(app).put('/usuario/atualizar').auth(token, { type: 'bearer' }).send({ ...updateObj, currentPassword: "teste12"});
         expect(res.statusCode).toEqual(403);
         expect(res.body).toEqual({ error: "Senha atual incorreta."});
     });
 
     it('should NOT update the password due to invalid password confirmation', async () => {
-        const res = await request(app).put('/update').auth(token, { type: 'bearer' }).send({ ...updateObj, passwordConfirmation: "wrongPass"});
+        const res = await request(app).put('/usuario/atualizar').auth(token, { type: 'bearer' }).send({ ...updateObj, passwordConfirmation: "wrongPass"});
         expect(res.statusCode).toEqual(400);
         expect(res.body).toEqual({ error: "Entradas inválidas."});
     });
 
     it('should update the password', async () => {
-        const res = await request(app).put('/update').auth(token, { type: 'bearer' }).send(updateObj);
+        const res = await request(app).put('/usuario/atualizar').auth(token, { type: 'bearer' }).send(updateObj);
         expect(res.statusCode).toEqual(200);
         expect(res.body.message).toEqual("Sucesso");
     });
@@ -120,7 +114,9 @@ const doctorObj = {
 	"number": 1234,
 	"neighborhood": "Bairro teste",
 	"city": "Sao paulo",
-	"state": "SP"
+	"state": "SP",
+    "login": "teste@afya",
+    "password": "teste123"
 }
 
 describe('/medicos(s) route', () => {
@@ -146,9 +142,8 @@ describe('/medicos(s) route', () => {
     it('should list doctors', async () => {
         const res = await request(app).get('/medicos').auth(token, {type: 'bearer'});
         expect(res.statusCode).toEqual(200);
-        expect(res.body[0]).toHaveProperty('uuid');
-        uuid = res.body[0].uuid;
-        
+        expect(res.body[0]).toHaveProperty('name');
+        uuid = res.body[0].uuid;        
     });
 
     it('should update a doctor', async () => {

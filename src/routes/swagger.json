@@ -67,7 +67,12 @@
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedError"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/login": {
