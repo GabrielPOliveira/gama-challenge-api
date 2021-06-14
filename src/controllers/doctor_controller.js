@@ -1,11 +1,13 @@
-const { Doctor, Address, Speciality } = require('../models');
+const { Doctor, Address, Speciality, User } = require('../models');
 const  Yup  = require('yup');
 
 module.exports = {
 
     index: async(req,res) => {
         try {       
-            const doctors = await Doctor.findAll();
+            const doctors = await Doctor.findAll({
+                include: [{model: Speciality, attributes: ['description']}]
+            });
 
             res.status(200).json(doctors); 
 
@@ -46,8 +48,9 @@ module.exports = {
 
     create: async(req, res) => {
         try {
+            
 
-            const {name, register, phone, cellphone, email, specialitiesId} = req.body;
+            const {name, register, phone, cellphone, email, specialitiesId, login, password} = req.body;
             const {zip_code, address, number, complement, neighborhood, city, state} = req.body;
 
             const registerExists = await Doctor.findOne({ where:{ register: register }});            
@@ -58,18 +61,22 @@ module.exports = {
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
                 register: Yup.string().required(),
-                phone: Yup.string(),
-                cellphone: Yup.string(),
-                email: Yup.string().email(),
+                phone: Yup.string().nullable(),
+                cellphone: Yup.string().nullable(),
+                email: Yup.string().email().nullable(),
                 specialitiesId: Yup.number().required(),
 
                 zip_code: Yup.string().required(),
                 address: Yup.string().required(),
                 number: Yup.string().required(),
-                complement: Yup.string(),
+                complement: Yup.string().nullable(),
                 neighborhood: Yup.string().required(),
                 city: Yup.string().required(),
-                state: Yup.string().required(),                
+                state: Yup.string().required(),  
+                
+                login: Yup.string().required().max(20),
+                password: Yup.string().required().min(6),
+                
             });
                                     
             if (!(await schema.isValid(req.body))){
@@ -77,7 +84,13 @@ module.exports = {
                     error: 'Falha na validação'
                 })
             }
+            
+            const loginExists = await User.findOne({ where: { login: req.body.login }});
 
+            if (loginExists){
+                return res.status(400).json({ error: "Usuário já cadastrado" });
+            }
+            
             const addressDoctor = await Address.create({
                 zip_code,
                 address,
@@ -90,8 +103,8 @@ module.exports = {
             
             if(!addressDoctor){               
                 throw new Error();
-            }
-
+            }        
+            
             const doctor = await Doctor.create({
                 name, 
                 register, 
@@ -100,6 +113,13 @@ module.exports = {
                 email, 
                 specialitiesId,
                 addressId: addressDoctor.id
+            });
+
+            const userMedico = await User.create({    
+                name,           
+                login,
+                password,
+                type: doctor.id,
             });
             
             res.status(201).json({message: "Sucesso", doctor});
@@ -116,15 +136,15 @@ module.exports = {
             const schema = Yup.object().shape({
                 name: Yup.string().required(),
                 register: Yup.string().required(),
-                phone: Yup.string(),
-                cellphone: Yup.string(),
-                email: Yup.string().email(),
+                phone: Yup.string().nullable(),
+                cellphone: Yup.string().nullable(),
+                email: Yup.string().email().nullable(),
                 specialitiesId: Yup.number().required(),
 
                 zip_code: Yup.string().required(),
                 address: Yup.string().required(),
                 number: Yup.string().required(),
-                complement: Yup.string(),
+                complement: Yup.string().nullable(),
                 neighborhood: Yup.string().required(),
                 city: Yup.string().required(),
                 state: Yup.string().required(),                

@@ -15,12 +15,13 @@ module.exports = {
             }
                 
             const id = user.id;
+            const type = user.type;
 
-            const token = jwt.sign({ id }, process.env.SECRET, {
-                expiresIn: "6h"
+            const token = jwt.sign({ id, type }, process.env.SECRET, {
+                expiresIn: "10h"
             });
             
-            return res.json({ user: {login, id}, token});
+            return res.json({ user: {login, id, type}, token});
             
         } catch (error) {
             res.status(401).json({ error: "Usuário ou senha inválidos" })

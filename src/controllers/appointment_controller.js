@@ -8,7 +8,14 @@ module.exports = {
         
         try {
             
-            const appointments = await Appointment.findAll();
+            const appointments = await Appointment.findAll({
+                include: [
+                    {model: Client, attributes: ['name']},                   
+                    {model: AppointmentStatus, attributes: ['status']},
+                    {model: Doctor, attributes: ['name']},                   
+                    
+                ]
+            });
 
             res.status(200).json({message: "Sucesso", appointments});
 
