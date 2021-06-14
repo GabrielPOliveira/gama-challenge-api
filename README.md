@@ -37,7 +37,7 @@ npm run start
 ------------------------
 ## ⚙️ Executando os testes
 
-Para executar os testes unitários que foram desenvoldiso utulzando o Jest do sistema basta utilizar o comando
+Para executar os testes unitários que foram desenvolvidos utilizando o Jest basta utilizar o comando
 ```
 npm run test
 ```
