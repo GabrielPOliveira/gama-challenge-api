@@ -308,7 +308,7 @@ describe('Consulta(s) Route', () => {
 
     it('should end an appointment', async () => {
         const res = await request(app).post(`/realizarConsulta/${uuid}`).auth(token, {type: 'bearer'}).send({
-            deion: "Teste",
+            description: "Teste",
 	        appointment_date: new Date(),
 	        clientsId: 1,
 	        doctorsId: 1,
